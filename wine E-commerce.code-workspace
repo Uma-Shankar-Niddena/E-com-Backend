@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "../.."
+		},
+		{
+			"path": "../../../wine"
+		},
+		{
+			"path": "../../../fullStack project"
+		}
+	],
+	"settings": {}
+}
