@@ -24,6 +24,8 @@ const cookieParser = require("cookie-parser");
 
 
 
+
+
 const app = express();
 app.use(cookieParser());
 
@@ -31,8 +33,10 @@ app.use(cookieParser());
 
 
 app.use(cors({
-  origin: "http://localhost:5173",
+ origin: "http://localhost:5173",  // frontend URL
   credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"]
 }));
 // Middlewares
 
@@ -53,6 +57,11 @@ app.use('/admin',totalordersForadminRoute)
 app.use('/admin',adminRoute)
 app.use('/place-order/',addEachorderDetails)
 
+const PORT=process.env.PORT || 5000
+const JWT_SECRET=process.env.JWT_SECRET 
+
+
+const ADMIN_SECRET=process.env.ADMIN_SECRET
 
 // Start the server and prepare DB
 const startServer = async () => {
@@ -62,8 +71,8 @@ const startServer = async () => {
        // ✅ Inserts stuff data if table is empty
   ; //update category to wine" 
 
-  app.listen(3001, () => {
-    console.log("🚀 Server running on http://localhost:3001");
+  app.listen(PORT, () => {
+    console.log(`🚀 Server running on ${PORT} `);
   });
 };
 

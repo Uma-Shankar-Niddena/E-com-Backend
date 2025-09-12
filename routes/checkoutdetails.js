@@ -1,5 +1,5 @@
 const express=require("express")
-const connectDB=require("../db/connection")
+const connectDB=require("../../../../Task manager/Task-manager-app/backend/db/connect")
 const router=express.Router()
 const middleware=require("../db/middleware")
 let db;
@@ -44,11 +44,11 @@ router.post('/add-checkout-details',middleware,async (req, res)=>{
   total
   ])
     
-   res.send(query)
+   res.json({message:query})
 
     }
     catch(err){
-        res.json({message:err.message})
+        res.json({error:err.message})
     }
 })
 

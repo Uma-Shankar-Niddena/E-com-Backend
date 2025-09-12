@@ -1,10 +1,11 @@
 const express=require("express")
-const connectDB=require("../db/connection")
+const connectDB=require("../../../../Task manager/Task-manager-app/backend/db/connect")
 const bcrypt=require("bcrypt")
 const jwt=require("jsonwebtoken")
 const router=express.Router()
 let db;
-const SECRET_KEY="Arey Koushik Taagudham"
+;
+const SECRET_KEY=process.env.JWT_SECRET_ADMIN;
 
 router.post('/signup',async(req,res)=>{
      try{
@@ -14,15 +15,15 @@ router.post('/signup',async(req,res)=>{
          const hashpass=await bcrypt.hash(password,10)
          if (!isExist){
             await db.run(`INSERT INTO admins(username,password) VALUES(?,?)`,[username,hashpass])
-            res.send("Admin Account created!")
+            res.json({message:"Admin Account created!"})
 
          }
          else{
-            res.send("admins table lo already data vundi ra ungamma!!")
+            res.json({message:"admins table lo already data vundi ra ungamma!!"})
          }
      }
      catch(error){
-        res.send(error.message)
+        res.json({error:error.message})
      }
 })
 

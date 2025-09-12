@@ -1,4 +1,4 @@
-POST http://localhost:3001/signup
+POST ${import.meta.env.VITE_API_URL}/signup
 Content-Type:application/json 
 
 {
@@ -10,22 +10,22 @@ Content-Type:application/json
 
 
 ### 
-GET http://localhost:3001/users
+GET ${import.meta.env.VITE_API_URL}/users
 
 
 ### GET username by userId 
 ### ///on login
 
-POST http://localhost:3001/login 
+POST http://localhost:3001/login
 Content-Type:application/json 
 
 {
-    "username":"kiran",
-    "password":"kiran1234"
+    "username":"ram",
+    "password":"ram1234"
 }
 ### insert data into orders table 
 POST http://localhost:3001/cart/add
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjE1LCJpYXQiOjE3NTMwODg2MjR9.r2Yl-R4tT2olW15SZ9Qi15tiW7FK79jNCVy1qFk3FJU
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEzLCJpYXQiOjE3NTU1OTEzMDR9.3Nwsnhp2FS5H1HVOFiWhCq2QRIR1IRmmd4ERmI7Dwy4
 Content-Type: application/json 
 
 {
@@ -36,21 +36,21 @@ Content-Type: application/json
 }
 
 ### GET all products 
-GET http://localhost:3001/api/products
+GET ${import.meta.env.VITE_API_URL}/api/products
 
 ### get cartitems 
 GET http://localhost:3001/cart
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjE1LCJpYXQiOjE3NTMwODg2MjR9.r2Yl-R4tT2olW15SZ9Qi15tiW7FK79jNCVy1qFk3FJU
+Authorization: Bearer
 Content-Type: application/json 
 
 ### delete cart item with cartId
-DELETE http://localhost:3001/cart/remove/40
+DELETE ${import.meta.env.VITE_API_URL}/cart/remove/40
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEzLCJpYXQiOjE3NTI4MTQ5NzN9.1PZR8WZhnJ2l7Kg6tjfT3lGUC92nXf44kVTf5CF3pq0
 
 
 ### place order 
 
-POST http://localhost:3001/orders/place-order 
+POST ${import.meta.env.VITE_API_URL}/orders/place-order 
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjE1LCJpYXQiOjE3NTMwODg2MjR9.r2Yl-R4tT2olW15SZ9Qi15tiW7FK79jNCVy1qFk3FJU
 Content-Type: application/json 
 
@@ -59,17 +59,17 @@ Content-Type: application/json
 }
 
 ### get specific order with orderId 
-GET http://localhost:3001/orders
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjE1LCJpYXQiOjE3NTMwODkyOTV9.E-n2ihwsTfeRCLXIsG_uezb6mH0N0qk0kh9jvEKg8Pw
+GET ${import.meta.env.VITE_API_URL}/orders
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjE1LCJpYXQiOjE3NTMwOTg2ODV9.hq3Eqwm5z-4BPgGCU7vKweyQyy4kUiYJnx-3Bp9lZvE
 ### get all the order by the user
 
-GET http://localhost:3001/orders/place-order
+GET ${import.meta.env.VITE_API_URL}/orders/place-order
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEzLCJpYXQiOjE3NTI5MjY3MjZ9.mm4JfxJCjNePYpRY7pXjCKIRTFv9FZBU5PR8j-AvlHQ
 
 
 ### admin credits 
 
-POST http://localhost:3001/admin/signup 
+POST ${import.meta.env.VITE_API_URL}/admin/signup 
 Content-Type: application/json 
 
 {
@@ -78,8 +78,8 @@ Content-Type: application/json
 }
 
 ### admin login 
-POST http://localhost:3001/admin/signIn 
-Content-Type: application/json 
+POST ${import.meta.env.VITE_API_URL}/admin/signIn 
+Content-Type: application/json
 
 {
     "username":"shankar_0077",
@@ -87,10 +87,10 @@ Content-Type: application/json
 }
 
 ### all orders details like which product they ordereed all that from admin 
-GET http://localhost:3001/admin/checkout-Data
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc1MzA4OTQ1MX0.lMrGHDoJydMWLyKXyze4IEQAV5lVE7N-U0XUMTjt8Ho
+GET ${import.meta.env.VITE_API_URL}/admin/checkout-Data
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoyLCJpYXQiOjE3NTMxMDY3ODN9.Q8Bn-ssKz9DWltStY9kIfNtY_JFLJAJD8KjUZlZGqKM
 ### place order 
-POST  http://localhost:3001/place-order/add-checkout-details
+POST  ${import.meta.env.VITE_API_URL}/place-order/add-checkout-details
 Content-Type: application/json 
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjE1LCJpYXQiOjE3NTMwOTY4NDl9.S_DOopo1bKtzZMx2Pxr_6CfnTB8adPx50JJjPmZ_kT0
 
@@ -123,8 +123,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjE1LCJpY
 
     
 ### get all order at admin view
-GET http://localhost:3001/admin/all-orders
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc1MzA5NTkzMX0.mf1eQPVaOo0V_1ejRSXLyl0PlecatfwKFed9M93aW2I
+GET ${import.meta.env.VITE_API_URL}/admin/all-orders
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoyLCJpYXQiOjE3NTMxMDY3ODN9.Q8Bn-ssKz9DWltStY9kIfNtY_JFLJAJD8KjUZlZGqKM
 ### delete all cartitems after placing order!
-DELETE  http://localhost:3001/cart/remove-all-items 
+DELETE  ${import.meta.env.VITE_API_URL}/cart/remove-all-items 
 Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjE0LCJpYXQiOjE3NTI5MzExMDZ9.YJAsi1U63f3ftI_tpSUjIlSCYHwPhEtz7EIqe9mzrp0

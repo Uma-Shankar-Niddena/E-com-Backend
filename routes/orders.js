@@ -1,5 +1,5 @@
 const express=require("express")
-const connectDB=require("../db/connection")
+const connectDB=require("../../../../Task manager/Task-manager-app/backend/db/connect")
 const jwt=require("jsonwebtoken")
 const authMiddleware=require("../db/middleware")
 const middleware = require("../db/middleware")
@@ -19,7 +19,7 @@ router.post("/place-order",authMiddleware,async (req,res)=>{
          
 
         if (cartItems.length==0){
-            res.send("Cart is Empty! Add Items")
+            res.json("Cart is Empty! Add Items")
 
         }
         else{
@@ -53,7 +53,7 @@ router.post("/place-order",authMiddleware,async (req,res)=>{
         
     }
     catch(error){
-        res.send(error)
+        res.json({error:error.message})
     }
 })
 
@@ -79,11 +79,11 @@ router.get('/',middleware,async(req,res)=>{
 
              WHERE orders.user_id=?`,[userid])
        
-        res.send(result)
+        res.json({message:result})
 
     }
     catch(error){
-        res.send(error.message)
+        res.json({error:error.message})
     }
 })
 

@@ -1,12 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const connectDB = require("../db/connection");
+const connectDB = require("../../../../Task manager/Task-manager-app/backend/db/connect");
 
 router.get("/products", async (req, res) => {
   try {
     const db = await connectDB();
     const productsFromDb = await db.all("SELECT * FROM products");
-    const stuffp=await db.all(`SELECT * FROM products WHERE category=?`,["stuff"])
     
     
     res.json({message:productsFromDb});

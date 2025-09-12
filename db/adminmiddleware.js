@@ -1,5 +1,5 @@
 const jwt=require("jsonwebtoken")
-const SECRET_KEY="Arey Koushik Taagudham"
+const SECRET_KEY=process.env.ADMIN_SECRET 
 
 const adminmiddleware=async (req,res,next)=>{
 

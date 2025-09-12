@@ -1,4 +1,4 @@
-const connectDB=require("../db/connection")
+const connectDB=require("../../../../Task manager/Task-manager-app/backend/db/connect")
 const express=require("express");
 const middleware = require("../db/middleware");
 const { route } = require("./products");
@@ -35,7 +35,7 @@ router.post('/add',middleware,async(req,res)=>{
 
     }
     catch(error){
-        res.json({message:error.message})
+        res.json({error:error.message})
     }
 })
 
@@ -96,7 +96,7 @@ router.delete('/remove/:id',middleware,async(req,res)=>{
 
     }
     catch(error){
-        res.json({message:error.message})
+        res.json({error:error.message})
     }
 })
 
@@ -105,10 +105,10 @@ router.delete('/remove-all-items',middleware,async(req,res)=>{
         db=await connectDB()
         const userid=req.user.userId 
         await db.run(`DELETE FROM cart WHERE userId=?`,[userid]) 
-        res.send("all cartitems deleted!")
+        res.json("all cartitems deleted!")
     }
     catch(err){
-        res.send(err.message)
+        res.json({error:err.message})
     }
 })
 

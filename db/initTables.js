@@ -109,7 +109,7 @@ await db.run(`CREATE TABLE IF NOT EXISTS admin_checking_orders (
   taxes REAL NOT NULL,
   total REAL NOT NULL,
   status TEXT DEFAULT 'Placed',        -- Placed, Preparing, Delivered etc.
-  createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
+  createdAt DATETIME DEFAULT CURRENT_TIMESTAMP  
       
   
   )`)

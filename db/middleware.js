@@ -1,5 +1,5 @@
 const jwt=require("jsonwebtoken")
-const SECRET_KEY="Arey Koushik Taagudham!!"
+const SECRET_KEY=process.env.JWT_SECRET
 
 
 const middleware=async (req,res,next)=>{
@@ -8,7 +8,7 @@ const middleware=async (req,res,next)=>{
     
   
     if (!token){
-        res.send("Acess denied!")
+        res.json({message:"Acess denied!"})
     }
     try{
           const isToken=jwt.verify(token,SECRET_KEY)
@@ -19,7 +19,7 @@ const middleware=async (req,res,next)=>{
     next()
     }
     catch(error){
-        res.json({message:error.message})
+        res.json({error:error.message})
     }
 
     
