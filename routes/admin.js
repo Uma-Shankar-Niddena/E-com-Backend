@@ -1,74 +1,39 @@
-const express=require("express")
-const connectDB=require("../../../../Task manager/Task-manager-app/backend/db/connect")
-const bcrypt=require("bcrypt")
-const jwt=require("jsonwebtoken")
-const router=express.Router()
-let db;
-;
-const SECRET_KEY=process.env.JWT_SECRET_ADMIN;
+const express=require("express");
+const jwt=require("jsonwebtoken");
+const bcrypt=require("bcrypt");
+const admin=require("../models/admin");
+require("dotenv").config();
+const SECRET_KEY=process.env.adminSecretKey;
 
-router.post('/signup',async(req,res)=>{
+const router=express.Router(); 
+
+router.post("/login",async(req,res)=>{
+     const {username,password}=req.body; 
+
      try{
-        const {username,password}=req.body 
-         db=await connectDB()
-         const isExist=await db.get(`SELECT * FROM admins`)
-         const hashpass=await bcrypt.hash(password,10)
-         if (!isExist){
-            await db.run(`INSERT INTO admins(username,password) VALUES(?,?)`,[username,hashpass])
-            res.json({message:"Admin Account created!"})
+        const checkingAdminDetails=await admin.findOne({username})
 
-         }
-         else{
-            res.json({message:"admins table lo already data vundi ra ungamma!!"})
-         }
+        if (checkingAdminDetails){
+
+          const comparePass=await bcrypt.compare(password,checkingAdminDetails.password)
+          if (comparePass){
+            const jwtToken=jwt.sign({adminId:checkingAdminDetails._id},SECRET_KEY)
+            res.cookie("token",jwtToken,{
+                httpOnly:true,
+                secure:false,
+                sameSite:"None"
+            });
+            res.status(200).json({message:"Admin logged in successfully",token:jwtToken})
+          }
+
      }
-     catch(error){
-        res.json({error:error.message})
-     }
-})
-
-router.post('/signIn',async(req,res)=>{  
-             const {username,password}=req.body 
-             console.log(username)
-            
-
-    try{
-      
-    
-       db=await connectDB()
-        const isExist=await db.get(`SELECT * FROM admins WHERE username=?`,[username])
-          console.log(isExist)
-     
-
-       if (!isExist){
-        return res.status(400).json({message:"Admin not found!"})
-       }
-
-        const comparepass=await bcrypt.compare(password,isExist.password)
-        if (!comparepass){
-          return   res.status(400).json({message:"password is incorrect!"})
-        }
-      
-            const token=jwt.sign({
-            adminId:isExist.id
-        },SECRET_KEY)
-
-     
-        res.cookie("token", token, {
-        httpOnly: false,    
-        secure: false,      
-        sameSite: "Strict"  
-    });
-     
-   return  res.status(200).json({message:"admin login sucessfull!",jwttoken:token})
-        
-
-
-
-    
     }
-    catch(error){
-      return   res.status(400).json({message:error.message})
-    }
-})
-module.exports=router;
+    catch(err){
+        res.status(500).json({message:err.message})
+     }  
+   
+      
+
+
+}  
+)

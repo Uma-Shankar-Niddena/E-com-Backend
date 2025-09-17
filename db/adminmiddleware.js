@@ -1,5 +1,7 @@
 const jwt=require("jsonwebtoken")
-const SECRET_KEY=process.env.ADMIN_SECRET 
+
+require("dotenv").config();
+const SECRET_KEY=process.env.adminSecretKey 
 
 const adminmiddleware=async (req,res,next)=>{
 

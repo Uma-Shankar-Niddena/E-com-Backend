@@ -1,5 +1,7 @@
 const jwt=require("jsonwebtoken")
-const SECRET_KEY=process.env.JWT_SECRET
+require("dotenv").config();
+
+const SECRET_KEY=process.env.secreteKey 
 
 
 const middleware=async (req,res,next)=>{
@@ -19,7 +21,7 @@ const middleware=async (req,res,next)=>{
     next()
     }
     catch(error){
-        res.json({error:error.message})
+        res.json({error:error.message,message:"at middleware"})
     }
 
     

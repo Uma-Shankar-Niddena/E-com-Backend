@@ -1,91 +1,42 @@
-const express=require("express")
-const connectDB=require("../../../../Task manager/Task-manager-app/backend/db/connect")
-const jwt=require("jsonwebtoken")
-const authMiddleware=require("../db/middleware")
-const middleware = require("../db/middleware")
+const express=require("express");
+const middleware=require("../db/middleware"); 
+const checkoutDetails=require("../models/adminCheckingOrders"); 
+const orders=require("../models/orders");
+const Products=require("../models/products");
+const router=express.Router(); 
 
-const router=express.Router()
+router.post("/add",middleware,async(req,res)=>{
+    const userid=req.user.userId; 
+    let productDetails;
 
-let db;
-router.post("/place-order",authMiddleware,async (req,res)=>{
-    try{
-         
-        const userid=req.user.userId
-        const {totalamount}=req.body 
-        db=await connectDB()
+    const checkout=await checkoutDetails.findById(req.body.checkoutId);
+     for (let eachProduct of checkout.items){
+         productDetails=await Products.findById(eachProduct.productId);
+     }
 
-
-        const cartItems=await db.all(`SELECT * FROM cart WHERE userId=?`,[userid])
-         
-
-        if (cartItems.length==0){
-            res.json("Cart is Empty! Add Items")
-
-        }
-        else{
-                 const usersid=req.user.userId
-   
-
-        const ordersquery=await db.run(`INSERT INTO orders(user_id,total_amount,status) VALUES(?,?,?)`,[usersid,totalamount,"pending!"])
-        const orderId=ordersquery.lastID
-        console.log(orderId)
-        
-
-        for (let each of cartItems ){
-                    await db.run(`INSERT INTO order_items(order_id,product_id,quantity,price) VALUES(?,?,?,?)`,[orderId,each.productId,each.quantity,"null"]);
-                
-        }
-
-      
-       
-        }
-        
-        
-         
-        
-     
-
-       
-     
-        
- 
-
-        
+    if (!checkout){
+        return res.status(400).json({message:"Invalid checkout details"});
     }
-    catch(error){
-        res.json({error:error.message})
+    try{ 
+        console.log("checkout info",checkout)
+         console.log("checkout details",productDetails)
+        const newOrder=new orders({
+            userId:userid,
+            totalAmount:checkout.total,
+            products:checkout.items.map(item => item.productId),
+
+
+            checkoutDetailsId:checkout._id
+        }); 
+        
+       await newOrder.save();
+        res.status(200).json({message:"Order placed successfully",orderId:newOrder._id});
+    }catch(err){
+        res.status(500).json({message:err.message})
     }
-})
 
-router.get('/',middleware,async(req,res)=>{
-    try{
-
-        db=await connectDB()
-        const userid=req.user.userId
-
-        const result=await db.all(`SELECT orders.user_id,
-  orders.total_amount,
-  orders.status,
-  orders.created_at,
-
-  order_items.id AS order_item_id,
-  order_items.order_id,
-  order_items.product_id,
-  order_items.quantity,
-  order_items.price,products.* FROM orders
-             JOIN order_items
-              ON orders.id=order_items.order_id
-              JOIN products ON order_items.product_id=products.id
-
-             WHERE orders.user_id=?`,[userid])
-       
-        res.json({message:result})
-
-    }
-    catch(error){
-        res.json({error:error.message})
-    }
 })
 
 
-module.exports=router;
+
+module.exports=router; 

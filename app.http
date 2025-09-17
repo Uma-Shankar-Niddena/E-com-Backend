@@ -7,10 +7,24 @@ Content-Type:application/json
     "password":"shankar123"
 
 }
+### 
+POST http://localhost:5000/user/login 
+Content-Type:application/json 
+
+{
+    "username":"ram",
+    "password":"ram1234"
+}
+
+#### 
+GET http://localhost:5000/cart
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OGM5MTBkZjBiMjgxNTM0NDgxOTE1OTYiLCJpYXQiOjE3NTgwMDg3MTd9.3KWFwDHgJ6TIX6A2NNo2RJRDWBXIiOVe6IVBySgSKbI 
+
+
 
 
 ### 
-GET ${import.meta.env.VITE_API_URL}/users
+GET http://localhost:5000/api/products
 
 
 ### GET username by userId 

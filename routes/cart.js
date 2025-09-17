@@ -1,115 +1,74 @@
-const connectDB=require("../../../../Task manager/Task-manager-app/backend/db/connect")
-const express=require("express");
-const middleware = require("../db/middleware");
-const { route } = require("./products");
+const express=require("express")
+const products=require("../models/products")
+const cartuu=require("../models/cart")
+const middleware=require("../db/middleware")
+const users=require("../models/users")
+const { route } = require("./productsss")
+
 const router=express.Router()
 
-let db;
-
-router.post('/add',middleware,async(req,res)=>{
-    try{
-        const userid=req.user.userId 
-        db=await connectDB()
-         const {productId,quantity}=req.body
 
 
-        const isExist=await db.get(`SELECT * FROM cart WHERE userId=? AND productId=?`,[userid,productId])
+router.post("/add",middleware,async(req,res)=>{
+    const userid=req.user.userId 
+    console.log("user id from middleware",userid)
 
-        if(isExist){
-            
-            await db.run(`UPDATE cart SET quantity=quantity+? WHERE id=?`,[quantity,isExist.id])
-            
+    const {productId,quantity}=req.body 
+    try { 
 
+        const cartProductExist=await cartuu.findOne({productId})
+        if(cartProductExist){
+             cartProductExist.quantity+=quantity || 1
+
+             await cartProductExist.save()
+             
         }
+
+        const newCart= new cartuu({
+          userId:userid ,
+          productId,
+          quantity:quantity || 1
+          
+        })
+
+      await newCart.save()
+      res.status(200).json({message:"item added to cart"})
+
+        
+    } catch (error) {
+        res.status(500).json({message:error.message})
+        
+    }
+})
+
+//// get all cart items 
+
+router.get('/',middleware,async(req,res)=>{
+
+  const userId=req.user.userId
+  console.log(userId)
+   
+  try {
+    const allCartItems=await cartuu.find({userId}).populate("productId").exec()
+    res.status(200).json({allCartItems})
     
-         else{
-           
-           await db.run(`INSERT INTO cart(userId,productId,quantity) VALUES(?,?,?)`,[userid,productId,quantity])
-                   res.json({message:"added to cart!"})
-
-
-         }
-     
-
-
-
-    }
-    catch(error){
-        res.json({error:error.message})
-    }
-})
-
-router.get('/',middleware,async (req,res)=>{
-
-    try{
-        db=await connectDB()
-        const userid=req.user.userId 
-      const resfromdb = await db.all(`
-    SELECT 
-  cart.id AS cartId, 
-  cart.userId, 
-  cart.productId, 
-  cart.quantity,
-  products.*
-FROM cart 
-LEFT JOIN products ON cart.productId = products.id
-WHERE userId = ?
-     
-    `,[userid]);
-
-       if (!resfromdb){
-        res.json({message:"No products"})
-      }
-     res.json({message:resfromdb})
-
-
-
-    }
-    catch(error){
-        res.json({message:error.message})
-    }
-})
-
-///delete cartItem 
-
-router.delete('/remove/:id',middleware,async(req,res)=>{
-      
-    try{
-        db=await connectDB()
-        const cartuuId = req.params.id
-
-        const userid=req.user.userId
-
-
-       const response= await db.run(`DELETE FROM cart WHERE userId=? AND id=?`,[userid,cartuuId])
+  } catch (error) {
+    res.status(500).json({message:error.message})
     
-        res.json({message:response})
-        
-        
-       
-        
-       
+  }
 
-
-
-
-
-    }
-    catch(error){
-        res.json({error:error.message})
-    }
 })
 
-router.delete('/remove-all-items',middleware,async(req,res)=>{
-    try{
-        db=await connectDB()
-        const userid=req.user.userId 
-        await db.run(`DELETE FROM cart WHERE userId=?`,[userid]) 
-        res.json("all cartitems deleted!")
-    }
-    catch(err){
-        res.json({error:err.message})
-    }
-})
+// delete cart item
 
-module.exports=router
+router.delete("/delete/:id",middleware,async(req,res)=>{
+  const cartId=req.params.id
+  try {
+    await cartuu.findByIdAndDelete(cartId)
+    res.status(200).json({message:"item removed from cart"})  
+  } catch (error) {
+    res.status(500).json({message:error.message})
+  }})
+
+
+module.exports=router;

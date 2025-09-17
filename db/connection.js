@@ -1,16 +1,17 @@
-const sqlite3 = require("sqlite3").verbose();
-const path = require("path");
+const mongoose = require("mongoose");
 
-const dbPath = path.join(__dirname, "../products.db");
-
-const connectDB = () => {
-  return new sqlite3.Database(dbPath, (err) => {
-    if (err) {
-      console.error("❌ Error connecting to database:", err.message);
-    } else {
-      console.log("✅ Connected to SQLite database at", dbPath);
-    }
-  });
+const connectDB = async () => {
+  try {
+  
+    await mongoose.connect(process.env.DATABASE_URL, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log("✅ MongoDB Connected...");
+  } catch (error) {
+    console.error("❌ MongoDB connection failed:", error.message);
+    process.exit(1);
+  }
 };
 
 module.exports = connectDB;
