@@ -15,7 +15,7 @@ const connectDb=require("./db/connection")
 const productsRoutes=require("./routes/productsss")
 const usersRoutes=require("./routes/users")
 const cartRoutes=require("./routes/cart")
-const adminCheckingOrdersRoute=require("./routes/checkoutDetails")
+const adminCheckingOrdersRoute=require("./routes/checkout")
 const ordersRoute=require("./routes/orders")
 const orderItemsRoute=require("./routes/orderItems")
 

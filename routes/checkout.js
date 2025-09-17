@@ -1,9 +1,9 @@
 const express=require("express");
-const products=require("../models/products");
 const cartuu=require("../models/cart");
 const middleware=require("../db/middleware");
-const users=require("../models/users");
+
 const AdminCheckingOrder=require("../models/adminCheckingOrders");
+const adminmiddleware = require("../db/adminmiddleware");
 
 const router=express.Router(); 
 
@@ -106,7 +106,17 @@ catch(error){
 
   }    
 
-)        
+)   
+
+router.get("/checking-orders",adminmiddleware,async(req,res)=>{
+    try{
+        const allOrders=await AdminCheckingOrder.find().populate("userId").exec();
+        res.status(200).json({allOrders})
+    } catch(err){
+        res.status(500).json({message:err.message})
+    } 
+  }) 
+  
 
 
 module.exports=router;
