@@ -72,7 +72,7 @@ require('./models/adminCheckingOrders');
 // Routes
 app.use("/api",productsRoutes)
 app.use("/user",usersRoutes)
-app.use("/cart",middleware,cartRoutes)
+app.use("/cart",cartRoutes)
 app.use("/admin/checkoutdetails",adminCheckingOrdersRoute)
 app.use("/orders",ordersRoute)
 app.use("/orders",orderItemsRoute)
