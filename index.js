@@ -1,5 +1,5 @@
 const express = require("express");
-const middleware = require("./db/middleware");
+
 
 require("dotenv").config();
 
@@ -48,11 +48,15 @@ app.use(cookieParser());
 
 
 app.use(cors({
- origin: "http://localhost:5173",  // frontend URL
+  origin: [
+    "http://localhost:5173",
+    "https://e-com-frontend-tau.vercel.app"  // ✅ Vercel live domain
+  ],
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
+
 
 // Middlewares
 

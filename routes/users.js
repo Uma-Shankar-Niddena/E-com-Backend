@@ -38,38 +38,45 @@ router.post("/register",async(req,res)=>{
     }
 })
 
-router.post('/login',async(req,res)=>{
-    try {
-        console.log("secret key",SECRET_KEY)
+router.post("/login", async (req, res) => {
+  try {
+    const { username, password } = req.body;
+    const checkingUserExist = await Users.findOne({ username });
 
-     const {username,password}=req.body 
-     const checkingUserExist=await Users.findOne({username})
-     if (checkingUserExist){
-        const comparePass=await bcrypt.compare(password,checkingUserExist.password)
-
-        if (comparePass){
-
-            const jwtToken=jwt.sign({userId:checkingUserExist.id},SECRET_KEY)
-           res.cookie("token",jwtToken,{
-            httpOnly:true,
-            secure:true,
-            sameSite:"None"
-           });
-         
-           res.status(200).json({message:jwtToken})
-
-       
-        }
-        res.status(500).json({message:"Invalid password"})
-     }
-
-
-        
-    } catch (error) {
-        res.status(500).json({message:error.message})
-        
+    if (!checkingUserExist) {
+      return res.status(404).json({ message: "User not found" });
     }
-})
+
+    const comparePass = await bcrypt.compare(password, checkingUserExist.password);
+
+    if (!comparePass) {
+      return res.status(401).json({ message: "Invalid password" });
+    }
+
+    const jwtToken = jwt.sign({ userId: checkingUserExist.id }, SECRET_KEY, { expiresIn: "1d" });
+
+    // 🧠 FIX: Send proper cookie options
+res.cookie("token", jwtToken, {
+  httpOnly: true,
+  secure: true,        // ✅ must be true for HTTPS (Render + Vercel)
+  sameSite: "None",    // ✅ required for cross-domain cookies
+  maxAge: 24 * 60 * 60 * 1000
+});
+
+
+
+return res.status(200).json({ message: "Login successful" });
+
+
+    console.log("✅ Token set in cookie:", jwtToken);
+    return res.status(200).json({ message: "Login successful" });
+
+  } catch (error) {
+    console.error("❌ Login error:", error.message);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 
 
 module.exports=router;

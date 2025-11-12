@@ -42,23 +42,23 @@ router.post("/add",middleware,async(req,res)=>{
 })
 
 //// get all cart items 
+router.get('/', middleware, async (req, res) => {
+  console.log("✅ Cart routes file loaded");
 
-router.get('/',middleware,async(req,res)=>{
-console.log("✅ Cart routes file loaded");
+  console.log("🧠 req.user:", req.user);
+  const userId = req.user?.userId;
+  console.log("🧾 userId:", userId);
 
-  const userId=req.user.userId
-  console.log(userId)
-   
   try {
-    const allCartItems=await cartuu.find({userId}).populate("productId").exec()
-    res.status(200).json({allCartItems})
-    
+    const allCartItems = await cartuu.find({ userId }).populate("productId").exec();
+    console.log("🛒 Found items:", allCartItems);
+    res.status(200).json({ allCartItems });
   } catch (error) {
-    res.status(500).json({message:error.message})
-    
+    console.error("❌ Error fetching cart items:", error);
+    res.status(500).json({ message: error.message });
   }
+});
 
-})
 
 // delete cart item
 
