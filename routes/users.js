@@ -52,7 +52,7 @@ router.post('/login',async(req,res)=>{
             const jwtToken=jwt.sign({userId:checkingUserExist.id},SECRET_KEY)
            res.cookie("token",jwtToken,{
             httpOnly:true,
-            secure:false,
+            secure:true,
             sameSite:"None"
            });
          
