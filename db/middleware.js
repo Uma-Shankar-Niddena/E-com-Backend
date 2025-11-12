@@ -9,10 +9,11 @@ const SECRET_KEY = process.env.secreteKey;
 const middleware = async (req, res, next) => {
   console.log("✅ Middleware triggered"); // check this log
 
-  const token = req.cookies.token; // make sure cookie-parser is used in index.js
+  const token = req.cookies.token;
+  console.log(token) // make sure cookie-parser is used in index.js
 
   if (!token) {
-    console.log("❌ No token found in cookies");
+    console.log( token);
     return res.status(401).json({ message: "Access denied! Token missing" });
   }
 
