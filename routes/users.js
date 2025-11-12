@@ -16,6 +16,7 @@ router.post("/register",async(req,res)=>{
 
         const isUsernameExist=await Users.findOne({username})
         if (isUsernameExist){
+            return res.status(400).json({message:"Username already exists"})
 
         }
 
@@ -69,4 +70,6 @@ router.post('/login',async(req,res)=>{
         
     }
 })
+
+
 module.exports=router;

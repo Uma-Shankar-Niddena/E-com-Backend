@@ -1,4 +1,5 @@
 const express = require("express");
+const middleware = require("./db/middleware");
 
 require("dotenv").config();
 
@@ -19,6 +20,7 @@ const adminCheckingOrdersRoute=require("./routes/checkout")
 const ordersRoute=require("./routes/orders")
 const orderItemsRoute=require("./routes/orderItems")
 
+
 /*
 const productsRoutes = require("./sqlite-routes/products");
 const usersRoutes=require('./sqlite-routes/users')
@@ -29,7 +31,6 @@ const checkingOrdersRoute=require("./sqlite-routes/checkingorders")
 const totalordersForadminRoute=require("./sqlite-routes/totalordersForadmin")
 const adminRoute=require("./sqlite-routes/admin")
 const addEachorderDetails=require('./sqlite-routes/checkoutdetails')*/
-const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const dotenv=require("dotenv")
 
@@ -37,6 +38,7 @@ dotenv.config()
 connectDb()
 
 
+const cors = require("cors");
 
 
 
@@ -68,10 +70,9 @@ require('./models/cart');
 require('./models/adminCheckingOrders');
 
 // Routes
-
 app.use("/api",productsRoutes)
 app.use("/user",usersRoutes)
-app.use("/cart",cartRoutes)
+app.use("/cart",middleware,cartRoutes)
 app.use("/admin/checkoutdetails",adminCheckingOrdersRoute)
 app.use("/orders",ordersRoute)
 app.use("/orders",orderItemsRoute)

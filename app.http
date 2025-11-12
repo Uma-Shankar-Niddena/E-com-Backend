@@ -20,11 +20,72 @@ Content-Type:application/json
 GET http://localhost:5000/cart
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OGM5MTBkZjBiMjgxNTM0NDgxOTE1OTYiLCJpYXQiOjE3NTgwMDg3MTd9.3KWFwDHgJ6TIX6A2NNo2RJRDWBXIiOVe6IVBySgSKbI 
 
+### 
 
+POST http://localhost:5000/cart/add 
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OGM5MTBkZjBiMjgxNTM0NDgxOTE1OTYiLCJpYXQiOjE3NTgwMDg3MTd9.3KWFwDHgJ6TIX6A2NNo2RJRDWBXIiOVe6IVBySgSKbI
+Content-Type: application/json 
+
+{
+    "productId":"68c542314c442e5efcedfc48",
+    "quantity":1
+}
+
+### 
+DELETE http://localhost:5000/cart/delete/68c9190a386b770979e5db97
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OGM5MTBkZjBiMjgxNTM0NDgxOTE1OTYiLCJpYXQiOjE3NTgwMDg3MTd9.3KWFwDHgJ6TIX6A2NNo2RJRDWBXIiOVe6IVBySgSKbI
+
+### 
+
+####
+POST http://localhost:5000/admin/checkoutdetails/add 
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoiNjhmOTEwZGYwYjI4MTUzNDQ4MTkxNTk2IiwiaWF0IjoxNzU4MDA4NzE3fQ.3KWFwDHgJ6TIX6A2NNo2RJRDWBXIiOVe6IVBySgSKbI
+Content-Type: application/json 
+
+{
+  "userId": "68c910df0b28153448191596",
+  "userName": "shankar",
+  "phoneNumber": "987434210",
+  "deliveryTime": "2025-07-19 1:30",
+  "specialInstructions": "Please call before delivery.",
+  "items": [
+    {
+      "productId": "68c542314c442e5efcedfc47",
+      "qty": 1,
+      "price": 40.00
+    }
+
+  ],
+  "subtotal": 45.00,
+  "deliveryFee": 50,
+  "deliveryAddress": "viswakarma colony,Hyderabad, Telangana",
+  "paymentMethod": "Cash",
+  "taxes": 5.60,
+  "total": 50.60
+}
 
 
 ### 
 GET http://localhost:5000/api/products
+
+
+### 
+POST http://localhost:5000/orders/add 
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoiNjhmOTEwZGYwYjI4MTUzNDQ4MTkxNTk2IiwiaWF0IjoxNzU4MDA4NzE3fQ.3KWFwDHgJ6TIX6A2NNo2RJRDWBXIiOVe6IVBySgSKbI 
+Content-Type: application/json 
+
+{
+  "checkoutId": "68ca5405b1229bbb4adf1e13"
+}
+
+### 
+POST http://localhost:5000/orders/orderItems 
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoiNjhmOTEwZGYwYjI4MTUzNDQ4MTkxNTk2IiwiaWF0IjoxNzU4MDA4NzE3fQ.3KWFwDHgJ6TIX6A2NNo2RJRDWBXIiOVe6IVBySgSKbI
+Content-Type: application/json 
+
+{
+  "quantity":1
+}
 
 
 ### GET username by userId 

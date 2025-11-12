@@ -1,0 +1,182 @@
+
+
+
+const connectDB = require("../db/connection"); // Adjust path as needed
+const Product = require("../models/products"); // Adjust path as needed
+
+
+// Map all product names to their updated image paths
+const updates = [
+  { name: 'Budweiser Magnum', image: '/images/budweiser22.jpg' },
+  { name: 'Tuborg Strong', image: '/images/tuborgstrongbeer.jpg' },
+  { name: 'Royal Stag', image: '/images/Royalstag.webp' },
+  { name: '100 Pipers', image: '/images/100pipers.jpg' },
+  { name: "McDowell''s No.1", image: '/images/mcdonaldsNo1.jpg' },
+  { name: 'Sula Chenin Blanc', image: '/images/sula.jpg' },
+  { name: 'Kingfisher Premium', image: '/images/kinigfisherpremium.jpg' },
+  { name: 'Bira 91 Blonde', image: '/images/bira.jpg' },
+  { name: 'Amrut Fusion', image: '/images/amritfusion.jpg' },
+  { name: 'Old Monk', image: '/images/oldmonk.jpg' },
+  { name: 'Blenders Pride', image: '/images/blenderspride.jpg' },
+  { name: 'Magic Moments', image: '/images/magicmoments.jpg' },
+  { name: 'Smirnoff Red', image: '/images/smirnoff.avif' },
+  { name: 'Hennessy VS', image: '/images/hennessy.avif' },
+  { name: "Jacob''s Creek Shiraz", image: '/images/jacobs2.jpg' },
+  { name: 'KRSMA Cabernet', image: '/images/krsma.webp' },
+  { name: 'Carlsberg Elephant', image: '/images/carlesberg2.jpg' },
+  { name: "Beck''s Ice", image: '/images/becksice2.jpg' },
+  { name: 'Heineken', image: '/images/heinken2.jpg' },
+  { name: 'Paul John Brilliance', image: '/images/PaulJohnBrilliance.jpg' },
+  { name: 'Black Dog', image: '/images/BlackDog.webp' },
+  { name: 'Imperial Blue', image: '/images/ImperialBlue.webp' },
+  { name: 'Haywards 5000', image: '/images/Haywards5000.webp' },
+  { name: 'Signature Premium', image: '/images/SignaturePremium.webp' },
+  { name: 'Royal Challenge', image: '/images/RoyalChallenge.jpg' },
+  { name: 'Antiquity Blue', image: '/images/AntiquityBlue.png' },
+  { name: 'Morpheus Brandy', image: '/images/MorpheusBrandy.webp' },
+  { name: 'Johnnie Walker Red', image: '/images/redlabel2.jpg' },
+  { name: "Teacher''s Highland Cream", image: '/images/TeachersHighlandCream.webp' },
+  { name: 'White Mischief', image: '/images/WhiteMischief.jpg' },
+  { name: 'Gongura Pachadi', image: '/images/gongurapacchadi.jpg' },
+  { name: 'Mirchi Bajji', image: '/mirapakayabajji.jpg' },
+  { name: 'Sakinalu', image: '/images/senakailu.jpg' },
+  { name: 'Chegodilu', image: '/images/chegodilu.jpg' },
+  { name: 'Cheese Platter', image: '/images/cheeseplatter.jpg' },
+  { name: 'Pesarattu Chips', image: '/images/pesarattuchips.jpg' },
+  { name: 'Aloogadda Pakodi', image: '/images/allogaddapakodi.jpg' },
+  { name: 'Stuffed Mushrooms', image: '/images/stuffedmushroom.jpg' },
+  { name: 'Guntur Chili Poppers', image: '/images/stuffedmushroom.jpg' },
+  { name: 'Jeedi Pappu Vepudu', image: '/images/chicken65.jpg' },
+  { name: 'Avocado Salad', image: '/images/stuffedmushroom.jpg' },
+  { name: 'Mokka Jonna Chaat', image: '/images/mokkajonnachat.jpg' },
+  { name: 'Paneer Tikka', image: '/images/pannertikka.jpg' },
+  { name: 'Dosakaya Pachadi', image: '/images/dosakayapachadi.jpg' },
+  { name: 'Pottu Pachadi', image: '/images/pottupacchadi.jpg' },
+  { name: 'Bendakaya Vepudu', image: '/images/bendakayavepudu.jpg' },
+  { name: 'Verusenaga Masala', image: '/images/verusenagamasala.jpg' },
+  { name: 'Kura Vegetables Skewers', image: '/images/kuravegitablessk.jpg' },
+  { name: 'Pappadam', image: '/images/papadalu.jpg' },
+  { name: 'Tamata Pachadi', image: '/images/tomatopacchadi.jpg' },
+  { name: 'Palakura Pakodi', image: '/images/ullipayapakodi.jpg' },
+  { name: 'Pandla Platter', image: '/images/pandlaplatter.jpg' },
+  { name: 'Garlic Bread', image: '/images/garlicbread.jpg' },
+  { name: 'Mixed Nuts', image: '/images/mixednuts.jpg' },
+  { name: 'Kheera Perugu', image: '/images/kheeraperugu.jpg' },
+  { name: 'Ullipaya Pakodi', image: '/images/ullipayapakodi.jpg' },
+  { name: 'Bruschetta', image: '/images/Bruchette.jpg' },
+  { name: 'Veg Cutlet', image: '/images/vegcutlet.jpg' },
+  { name: 'Senaga Pappu Vepudu', image: '/images/senagapappuvepudu.jpg' },
+  { name: 'Caprese Salad', image: '/images/capraseslad.jpg' },
+  { name: 'Hyderabadi Biryani', image: '/images/Hyderabadbiryani.jpg' },
+  { name: 'Ankapur Kodi Kura', image: '/images/anakapurkodikura.jpg' },
+  { name: 'Kodi Pulusu', image: '/images/kodipulusu.jpg' },
+  { name: 'Mamsam Pulusu', image: '/images/mamsampulusu.jpg' },
+  { name: 'Chinta Chiguru Mamsam', image: '/images/chintachigurumamsam.jpg' },
+  { name: 'Kodi Bhuna Masala', image: '/images/kodibhaunmasala.jpg' },
+  { name: 'Boti Kebab', image: '/images/botikabad.jpg' },
+  { name: 'Paya', image: '/images/paya.jpg' },
+  { name: 'Haleem', image: '/images/haleem.jpg' },
+  { name: 'Murgh ka Korma', image: '/images/murgkakurma.jpg' },
+  { name: 'Kaleja Vepudu', image: '/images/khalejamasalavepudu.jpg' },
+  { name: 'Ulavacharu', image: '/images/ulavacharusoup.jpg' },
+  { name: 'Guddu Pulusu', image: '/images/guddupulusu.jpg' },
+  { name: 'Kodi Vepudu', image: '/images/kodivepudu.jpg' },
+  { name: 'Mamsam Vepudu', image: '/images/mamsamvepudu.jpg' },
+  { name: 'Chepala Pulusu', image: '/images/chapalapulusu.jpg' },
+  { name: 'Chepala Vepudu', image: '/images/chepalavepudu.jpg' },
+  { name: 'Nalli Nihari', image: '/images/nallinihari.jpg' },
+  { name: 'Dalcha', image: '/images/dalcha.jpg' },
+  { name: 'Pattar ka Gosht', image: '/images/Pattarkagosht.jpg' },
+  { name: 'Marag', image: '/images/murgkakurma.jpg' },
+  { name: 'Kodi 65', image: '/images/chicken65.jpg' },
+  { name: 'Mamsam Keema', image: '/images/mamsamkeema.jpg' },
+  { name: 'Royyala Vepudu', image: '/images/prawnsfry.jpg' },
+  { name: 'Chakna', image: '/images/chakna.jpg' },
+  { name: 'Kodi Mandi', image: '/images/chickenmandi.jpg' },
+  { name: 'Mamsam Mandi', image: '/images/muttonmandi.jpg' },
+  { name: 'Bheja Vepudu', image: '/images/brainfry.jpg' },
+  { name: 'Gurda Vepudu', image: '/images/kidneyfry.jpg' },
+  { name: 'Kodi Kura', image: '/images/traditionalchickencurry.jpg' },
+  { name: 'Bisleri Mineral Water', image: '/images/bisleri2.jpg' },
+  { name: 'Kinley Water', image: '/images/KinleyWater.webp' },
+  { name: 'Aquafina Purified Water', image: '/images/AquafinaPurifiedWater.webp' },
+  { name: 'Himalayan Natural Mineral Water', image: '/images/HimalayanNaturalMineralWater.jpg' },
+  { name: 'Evian Natural Spring Water', image: '/images/EvianNaturalSpringWater.jpg' },
+  { name: 'Tata Water Plus', image: '/images/tatawaterplus.jpg' },
+  { name: 'Bailley Packaged Water', image: '/images/BailleyWater.webp' },
+  { name: 'San Pellegrino Still Water', image: '/images/SanPellegrinoStillWater.jpg' },
+  { name: 'Voss Still Water', image: '/images/vossstillwater.jpg' },
+  { name: 'Patanjali Divya Jal', image: '/images/patanjalidivyajal.jpg' },
+  { name: 'Oxigen Water', image: '/images/oxigenwater.jpg' },
+  { name: 'Vedica Himalayan Water', image: '/images/vidicahimalayawater.jpg' },
+  { name: 'Perrier Still Water', image: '/images/perrierwater.webp' },
+  { name: 'Fiji Artesian Water', image: '/images/fijiwater.webp' },
+  { name: 'B Natural Mineral Water', image: '/images/bnaturalmineralwater.avif' },
+  { name: 'Thums Up', image: '/images/thumsup2.jpg' },
+  { name: 'Limca', image: '/images/limcatin.jpg' },
+  { name: 'Sprite', image: '/images/sprite.jpg' },
+  { name: 'Schweppes Tonic Water', image: '/images/scpewers.jpg' },
+  { name: 'Coca-Cola', image: '/images/cocacola.jpg' },
+  { name: 'Fanta Orange', image: '/images/fanta2.jpg' },
+  { name: 'Bovonto', image: '/images/bovonto.png' },
+  { name: 'San Pellegrino Sparkling', image: '/images/SanPellegrinoStillWater.jpg' },
+  { name: 'Mirinda', image: '/images/mirinda.jpg' },
+  { name: 'Ginger Ale', image: '/images/gingerale.jpg' },
+  { name: 'Maaza Mango', image: '/images/maaza.avif' },
+  { name: 'Appy Fizz', image: '/images/appyfiz.jpg' },
+  { name: '7Up', image: '/images/7up.jpg' },
+  { name: 'Pepsi', image: '/images/pepsi.jpg' },
+  { name: 'Schweppes Ginger Beer', image: '/images/scpewers.jpg' },
+  { name: 'Cohiba Siglo VI', image: '/images/Cohiba.jpg' },
+  { name: 'Montecristo No. 2', image: '/images/Montecristo.webp' },
+  { name: 'Romeo y Julieta Churchill', image: '/images/Romeo.webp' },
+  { name: 'Partagas Serie D No. 4', image: '/images/Partagas.webp' },
+  { name: 'Davidoff Winston Churchill', image: '/images/churchill.webp' },
+  { name: 'Arturo Fuente Opus X', image: '/images/ArturoFuenteOpus.jpg' },
+  { name: 'Padron 1964 Anniversary', image: '/images/Partagas.webp' },
+  { name: 'Ashton VSG Robusto', image: '/images/ashton.jpg' },
+  { name: 'H. Upmann Magnum 50', image: '/images/HUpmann.webp' },
+  { name: 'Rocky Patel Decade', image: '/images/Rocky.jpg' },
+  { name: 'Gold Flake Kings', image: '/images/goldflake2.avif' },
+  { name: 'Classic Milds', image: '/images/classiccigar.jpg' },
+  { name: 'Wills Navy Cut', image: '/images/willsnavycut.jpg' },
+  { name: 'Charminar', image: '/images/charminarcigar.jpg' },
+  { name: 'Four Square', image: '/images/foursquare.jpg' },
+  { name: 'Editions', image: '/images/editions.jpg' },
+  { name: 'Marlboro Red', image: '/images/marlboro.png' },
+  { name: 'Bristol', image: '/images/bristol.jpg' },
+  { name: 'Scissors', image: '/images/scissors.jpg' },
+  { name: 'Cavanders Gold', image: '/images/cavanders.png' },
+  { name: 'Panama', image: '/images/panama.jpg' },
+  { name: 'Capstan', image: '/images/capstan.png' },
+  { name: 'Gold Flake Lights', image: '/images/goldflakelights.jpeg' },
+  { name: 'Red & White', image: '/images/redwhite.png' },
+  { name: 'Chancellor', image: '/images/chancalor.jpg' },
+];
+
+
+// Default image for products not matched
+const defaultImage = '/images/carlsberg.webp';
+
+async function runUpdate() {
+  await connectDB();
+
+  for (const u of updates) {
+    const result = await Product.updateMany(
+      { name: u.name },
+      { $set: { image: u.image } }
+    );
+    console.log(`Updated "${u.name}" => "${u.image}" (${result.modifiedCount} docs)`);
+  }
+
+  // Set default image for unmatched products
+  const result = await Product.updateMany(
+    { image: { $exists: false } },
+    { $set: { image: defaultImage } }
+  );
+  console.log(`Set default image for unmatched products (${result.modifiedCount} docs)`);
+
+  process.exit(0);
+}
+
+runUpdate();

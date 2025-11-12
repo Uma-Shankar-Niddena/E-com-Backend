@@ -44,6 +44,7 @@ router.post("/add",middleware,async(req,res)=>{
 //// get all cart items 
 
 router.get('/',middleware,async(req,res)=>{
+console.log("✅ Cart routes file loaded");
 
   const userId=req.user.userId
   console.log(userId)
@@ -69,6 +70,8 @@ router.delete("/delete/:id",middleware,async(req,res)=>{
   } catch (error) {
     res.status(500).json({message:error.message})
   }})
+
+
 
 
 module.exports=router;

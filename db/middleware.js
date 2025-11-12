@@ -1,33 +1,36 @@
-const jwt=require("jsonwebtoken")
-require("dotenv").config();
+const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
+dotenv.config({ path: "./.env" }); // make sure .env file is one level above
 
-const SECRET_KEY=process.env.secreteKey 
+const SECRET_KEY = process.env.secreteKey;
 
 
-const middleware=async (req,res,next)=>{
 
-    const token = req.cookies.token
-    
-  
-    if (!token){
-        res.json({message:"Acess denied!"})
-    }
-    try{
-          const isToken=jwt.verify(token,SECRET_KEY)
-    if(!isToken){
-        res.json({message:"wrong Jwt token!"})
-    }
-    req.user=isToken
-    next()
-    }
-    catch(error){
-        res.json({error:error.message,message:"at middleware"})
+const middleware = async (req, res, next) => {
+  console.log("✅ Middleware triggered"); // check this log
+
+  const token = req.cookies.token; // make sure cookie-parser is used in index.js
+
+  if (!token) {
+    console.log("❌ No token found in cookies");
+    return res.status(401).json({ message: "Access denied! Token missing" });
+  }
+
+  try {
+    const decoded = jwt.verify(token, SECRET_KEY);
+    if (!decoded) {
+      return res.status(403).json({ message: "Invalid JWT token!" });
     }
 
-    
-    
+    console.log("✅ Token verified successfully", decoded);
+    req.user = decoded;
+    next();
+  } catch (error) {
+    console.error("❌ JWT Verification Error:", error.message);
+    return res
+      .status(401)
+      .json({ message: "Invalid or expired token", error: error.message });
+  }
+};
 
-
-
-}
-module.exports= middleware;
+module.exports = middleware;
