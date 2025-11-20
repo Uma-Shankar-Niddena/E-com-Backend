@@ -3,13 +3,14 @@ const router = express.Router();
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
-const SECRET_KEY = process.env.secreteKey;
+
 
 router.get("/auth/check", (req, res) => {
   console.log("🔍 Checking auth…");
   console.log("Cookies received:", req.cookies);
 
   const token = req.cookies.token;
+  
 
   if (!token) {
     return res.json({ loggedIn: false });
