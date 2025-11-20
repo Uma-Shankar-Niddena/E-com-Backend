@@ -56,6 +56,10 @@ app.use(
   cors({
     origin: [
       "https://e-com-frontend-tau.vercel.app",
+      "https://e-com-frontend-git-master-umaniddena-gmailcoms-projects.vercel.app",
+
+      "https://e-com-frontend-o6impnrmg-umaniddena-gmailcoms-projects.vercel.app",
+       /\.vercel\.app$/,
       "http://localhost:5173"
     ],
     credentials: true, // 🔥 VERY IMPORTANT
