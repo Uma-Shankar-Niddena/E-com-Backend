@@ -64,7 +64,8 @@ router.post("/login", async (req, res) => {
   httpOnly: true,
   secure: true,       // Render = HTTPS ✔️
   sameSite: "None",   // Vercel <-> Render ✔️ REQUIRED
-  maxAge: 24 * 60 * 60 * 1000,
+
+  path: "/",         // Make sure cookie is sent on all routes
 });
 
 
