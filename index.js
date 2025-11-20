@@ -19,6 +19,8 @@ const cartRoutes=require("./routes/cart")
 const adminCheckingOrdersRoute=require("./routes/checkout")
 const ordersRoute=require("./routes/orders")
 const orderItemsRoute=require("./routes/orderItems")
+const authcheckRoute=require('./routes/authcheck')
+
 
 
 /*
@@ -76,6 +78,7 @@ require('./models/orderItems');
 require('./models/cart');
 require('./models/adminCheckingOrders');
 
+
 // Routes
 app.use("/api",productsRoutes)
 app.use("/user",usersRoutes)
@@ -83,6 +86,7 @@ app.use("/cart",cartRoutes)
 app.use("/admin/checkoutdetails",adminCheckingOrdersRoute)
 app.use("/orders",ordersRoute)
 app.use("/orders",orderItemsRoute)
+app.use("/",authcheckRoute)
 /*
 app.use("/api", productsRoutes);
 app.use('/',usersRoutes)

@@ -10,6 +10,7 @@ const middleware = async (req, res, next) => {
   console.log("✅ Middleware triggered"); // check this log
 
   const token = req.cookies.token;
+  console.log("🧩 Token from cookies:", token);
  // make sure cookie-parser is used in index.js
    console.log("🧩 Cookies received:", req.cookies);
 
