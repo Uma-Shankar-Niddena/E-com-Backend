@@ -41,6 +41,7 @@ router.post("/register",async(req,res)=>{
 router.post("/login", async (req, res) => {
   try {
     const { username, password } = req.body;
+
     const checkingUserExist = await Users.findOne({ username });
 
     if (!checkingUserExist) {
@@ -48,34 +49,38 @@ router.post("/login", async (req, res) => {
     }
 
     const comparePass = await bcrypt.compare(password, checkingUserExist.password);
-
     if (!comparePass) {
       return res.status(401).json({ message: "Invalid password" });
     }
 
-    const jwtToken = jwt.sign({ userId: checkingUserExist.id }, SECRET_KEY, { expiresIn: "1d" });
+    const jwtToken = jwt.sign(
+      { userId: checkingUserExist.id },
+      SECRET_KEY,
+      { expiresIn: "1d" }
+    );
 
-    // 🧠 FIX: Send proper cookie options
-res.cookie("token", jwtToken, {
+    // 🔥 Proper cookie settings for Render + Vercel
+ res.cookie("token", jwtToken, {
   httpOnly: true,
-  secure: true,        // ✅ must be true for HTTPS (Render + Vercel)
-  sameSite: "None",    // ✅ required for cross-domain cookies
-  maxAge: 24 * 60 * 60 * 1000
+  secure: true,       // Render = HTTPS ✔️
+  sameSite: "None",   // Vercel <-> Render ✔️ REQUIRED
+  maxAge: 24 * 60 * 60 * 1000,
 });
 
 
+    console.log("🔥 Token set in cookie:", jwtToken);
 
-return res.status(200).json({ message: "Login successful" });
-
-
-    console.log("✅ Token set in cookie:", jwtToken);
-    return res.status(200).json({ message: "Login successful" });
+    return res.status(200).json({
+      message: "Login successful",
+      success: true
+    });
 
   } catch (error) {
     console.error("❌ Login error:", error.message);
-    res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({ message: "Internal server error" });
   }
 });
+
 
 
 
